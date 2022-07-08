@@ -45,7 +45,7 @@ def find(update, context):
             depdate = findargs[2]
             open('depdate.txt', 'w').write(depdate) 
             update.message.reply_text("Please wait...")
-            ops = options()
+            ops = Options()
             ops.add_argument("-disable-gpu")
             ops.add_argument("-no-sandbox")
             serv = Service(ChromeDriverManager().install())
