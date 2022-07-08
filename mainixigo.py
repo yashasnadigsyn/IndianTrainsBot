@@ -44,16 +44,16 @@ def find(update, context):
             depdate = findargs[2]
             open('depdate.txt', 'w').write(depdate) 
             update.message.reply_text("Please wait...")
-            options = options()
-            options.log.level = "trace"
-            options.add_argument("-remote-debugging-port=9224")
-            options.add_argument("-headless")
-            options.add_argument("-disable-gpu")
-            options.add_argument("-no-sandbox")
+            ops = options()
+            ops.log.level = "trace"
+            ops.add_argument("-remote-debugging-port=9224")
+            ops.add_argument("-headless")
+            ops.add_argument("-disable-gpu")
+            ops.add_argument("-no-sandbox")
             binary = os.environ.get('FIREFOX_BIN')
-            options.binary_location = binary
+            ops.binary_location = binary
             serv = Service(os.environ.get('GECKODRIVER_PATH'))
-            driver = webdriver.Firefox(service=serv,options=options)     
+            driver = webdriver.Firefox(service=serv,options=ops)     
             url = f"https://www.ixigo.com/search/result/train/{src}/{dest}/{depdate}//1/0/0/0/ALL"
             driver.maximize_window()
             driver.get(url)
