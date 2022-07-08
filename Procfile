@@ -1,1 +1,1 @@
-worker: python3 mainixigo.py 
+web: python3 mainixigo.py 
