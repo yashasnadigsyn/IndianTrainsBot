@@ -35,76 +35,74 @@ def explain(update, context):
                               "You can type: /find YPR BDVT 10072022")
 
 def find(update, context):
-    try:
-        findargs = context.args
-        if len(findargs) == 3:
-            src = findargs[0]
-            open('src.txt', 'w').write(src)
-            dest = findargs[1]
-            open('dest.txt', 'w').write(dest)
-            depdate = findargs[2]
-            open('depdate.txt', 'w').write(depdate) 
-            update.message.reply_text("Please wait...")
-            ops = Options()
-            ops.add_argument("-disable-gpu")
-            ops.add_argument("-no-sandbox")
-            serv = Service(ChromeDriverManager().install())
-            driver = webdriver.Firefox(service=serv,options=ops)     
-            url = f"https://www.ixigo.com/search/result/train/{src}/{dest}/{depdate}//1/0/0/0/ALL"
-          
-            driver.get(url)
-            # time.sleep(5)
-            # cookies = pickle.load(open("cookies.pkl", "rb"))
-            # for cookie in cookies:
-            #     driver.add_cookie(cookie)
-            time.sleep(2)
-            name_number = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.CLASS_NAME, "train-data-wrapper")))
-            trainumberlist = []
-            count = 0
-            for i in name_number:
-                trainnumber = WebDriverWait(i, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "train-number"))).text
-                trainumberlist.append(trainnumber)
-                trainname = WebDriverWait(i, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "train-name"))).text
-                #runson = WebDriverWait(i, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "runs-on"))).text
-                traintype = WebDriverWait(i, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "train-type"))).text
-                # srcdesttime = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.CLASS_NAME, "time")))
-                # datedate = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.CLASS_NAME, "date")))
-                leftwing = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.CLASS_NAME, "left-wing")))
-                timetime1 = WebDriverWait(leftwing[count], 10).until(EC.presence_of_element_located((By.CLASS_NAME, "time")))
-                datedate1 = WebDriverWait(leftwing[count], 10).until(EC.presence_of_element_located((By.CLASS_NAME, "date")))
-                rightwing = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.CLASS_NAME, "right-wing")))
-                timetime2 = WebDriverWait(rightwing[count], 10).until(EC.presence_of_element_located((By.CLASS_NAME, "time")))
-                datedate2 = WebDriverWait(rightwing[count], 10).until(EC.presence_of_element_located((By.CLASS_NAME, "date")))
-                showavail = WebDriverWait(i, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, "u-ripple")))
-                driver.execute_script("arguments[0].click();", showavail)
-                # trainfareavail = WebDriverWait(i, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "train-fare-avail")))
-                # trainclass = WebDriverWait(trainfareavail, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "train-fares")))
-                fareclass = WebDriverWait(i, 10).until(EC.presence_of_all_elements_located((By.CLASS_NAME, "fare-class")))
-                fareclasslist = {}
-                for j in fareclass:
-                    driver.execute_script("arguments[0].click();", j)
-                    # fareprice = WebDriverWait(i, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "train-fareAvail"))).text
-                    fareprice = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, f"/html/body/div[1]/div/div[3]/div[1]/div[2]/ul/li[{count+1}]/div/div[1]/div/div[1]/div[2]/div/span[2]"))).text
-                    fareclasslist[j.text] = f"₹{fareprice}"
-                    time.sleep(0.5)
-                
-                update.message.reply_text(f"""From: {src}\nTo: {dest}\nDate: {depdate}\nTrain Number: {trainnumber}\nTrain Name: {trainname}\nTrain Type:{traintype}\n Start: {timetime1.text}--{datedate1.text}\n End: {timetime2.text}--{datedate2.text}\n""")
-                update.message.reply_text(f"""Fare Class: {fareclasslist}""")
-                #bot: Bot = context.bot
-               # bot.send_message(chat_id=update.message.chat_id, text=f"""Seat Availability: {seatavailible}""", parse_mode=telegram.ParseMode.HTML)
-                count += 1
 
-            buttons = []
-            for i in trainumberlist:
-                buttons.append([KeyboardButton(f"Train Number: {i}")])  
-            context.bot.send_message(chat_id=update.effective_chat.id, text="Please click on the train number to check availibility of seats", reply_markup=telegram.ReplyKeyboardMarkup(buttons))
+    findargs = context.args
+    if len(findargs) == 3:
+        src = findargs[0]
+        open('src.txt', 'w').write(src)
+        dest = findargs[1]
+        open('dest.txt', 'w').write(dest)
+        depdate = findargs[2]
+        open('depdate.txt', 'w').write(depdate) 
+        update.message.reply_text("Please wait...")
+        ops = Options()
+        ops.add_argument("-disable-gpu")
+        ops.add_argument("-no-sandbox")
+        serv = Service(ChromeDriverManager().install())
+        driver = webdriver.Firefox(service=serv,options=ops)     
+        url = f"https://www.ixigo.com/search/result/train/{src}/{dest}/{depdate}//1/0/0/0/ALL"
 
-        else:
-            update.message.reply_text("I guess you have misunderstood! /find src dest date")
-            update.message.reply_text("use /explain for examples...")
-    except Exception as e:
-        print(e)
+        driver.get(url)
+        # time.sleep(5)
+        # cookies = pickle.load(open("cookies.pkl", "rb"))
+        # for cookie in cookies:
+        #     driver.add_cookie(cookie)
+        time.sleep(2)
+        name_number = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.CLASS_NAME, "train-data-wrapper")))
+        trainumberlist = []
+        count = 0
+        for i in name_number:
+            trainnumber = WebDriverWait(i, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "train-number"))).text
+            trainumberlist.append(trainnumber)
+            trainname = WebDriverWait(i, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "train-name"))).text
+            #runson = WebDriverWait(i, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "runs-on"))).text
+            traintype = WebDriverWait(i, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "train-type"))).text
+            # srcdesttime = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.CLASS_NAME, "time")))
+            # datedate = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.CLASS_NAME, "date")))
+            leftwing = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.CLASS_NAME, "left-wing")))
+            timetime1 = WebDriverWait(leftwing[count], 10).until(EC.presence_of_element_located((By.CLASS_NAME, "time")))
+            datedate1 = WebDriverWait(leftwing[count], 10).until(EC.presence_of_element_located((By.CLASS_NAME, "date")))
+            rightwing = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.CLASS_NAME, "right-wing")))
+            timetime2 = WebDriverWait(rightwing[count], 10).until(EC.presence_of_element_located((By.CLASS_NAME, "time")))
+            datedate2 = WebDriverWait(rightwing[count], 10).until(EC.presence_of_element_located((By.CLASS_NAME, "date")))
+            showavail = WebDriverWait(i, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, "u-ripple")))
+            driver.execute_script("arguments[0].click();", showavail)
+            # trainfareavail = WebDriverWait(i, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "train-fare-avail")))
+            # trainclass = WebDriverWait(trainfareavail, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "train-fares")))
+            fareclass = WebDriverWait(i, 10).until(EC.presence_of_all_elements_located((By.CLASS_NAME, "fare-class")))
+            fareclasslist = {}
+            for j in fareclass:
+                driver.execute_script("arguments[0].click();", j)
+                # fareprice = WebDriverWait(i, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "train-fareAvail"))).text
+                fareprice = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, f"/html/body/div[1]/div/div[3]/div[1]/div[2]/ul/li[{count+1}]/div/div[1]/div/div[1]/div[2]/div/span[2]"))).text
+                fareclasslist[j.text] = f"₹{fareprice}"
+                time.sleep(0.5)
+
+            update.message.reply_text(f"""From: {src}\nTo: {dest}\nDate: {depdate}\nTrain Number: {trainnumber}\nTrain Name: {trainname}\nTrain Type:{traintype}\n Start: {timetime1.text}--{datedate1.text}\n End: {timetime2.text}--{datedate2.text}\n""")
+            update.message.reply_text(f"""Fare Class: {fareclasslist}""")
+            #bot: Bot = context.bot
+           # bot.send_message(chat_id=update.message.chat_id, text=f"""Seat Availability: {seatavailible}""", parse_mode=telegram.ParseMode.HTML)
+            count += 1
+
+        buttons = []
+        for i in trainumberlist:
+            buttons.append([KeyboardButton(f"Train Number: {i}")])  
+        context.bot.send_message(chat_id=update.effective_chat.id, text="Please click on the train number to check availibility of seats", reply_markup=telegram.ReplyKeyboardMarkup(buttons))
+
+    else:
+        update.message.reply_text("I guess you have misunderstood! /find src dest date")
         update.message.reply_text("use /explain for examples...")
+    
 
 def trainumber(update, context):
     if "Train Number:" in update.message.text:
