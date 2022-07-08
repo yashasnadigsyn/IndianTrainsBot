@@ -3,7 +3,8 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import time
+import time, os
+from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 from telegram import KeyboardButton
 import telegram.ext, telegram
 from telegram import Bot
@@ -42,7 +43,14 @@ def find(update, context):
             depdate = findargs[2]
             open('depdate.txt', 'w').write(depdate) 
             update.message.reply_text("Please wait...")
-            driver = webdriver.Firefox()
+           	options = webdriver.FirefoxOptions()
+           	options.log.level = "trace"
+        	options.add_argument("-remote-debugging-port=9224")
+	        options.add_argument("-headless")
+	        options.add_argument("-disable-gpu")
+	        options.add_argument("-no-sandbox")
+            binary = FirefoxBinary(os.environ.get('FIREFOX_BIN'))
+            driver = webdriver.Firefox(firefox_binary=binary, executable_path=os.environ.get('GECKODRIVER_PATH'), options=options)     
             url = f"https://www.ixigo.com/search/result/train/{src}/{dest}/{depdate}//1/0/0/0/ALL"
             driver.maximize_window()
             driver.get(url)
