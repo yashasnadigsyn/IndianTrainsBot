@@ -4,8 +4,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time, os
-from selenium.webdriver.firefox.options import Options as options
-from selenium.webdriver.firefox.service import Service
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 from telegram import KeyboardButton
 import telegram.ext, telegram
 from telegram import Bot
@@ -45,17 +46,12 @@ def find(update, context):
             open('depdate.txt', 'w').write(depdate) 
             update.message.reply_text("Please wait...")
             ops = options()
-            ops.log.level = "trace"
-            ops.add_argument("-remote-debugging-port=9224")
-            ops.add_argument("-headless")
             ops.add_argument("-disable-gpu")
             ops.add_argument("-no-sandbox")
-            binary = os.environ.get('FIREFOX_BIN')
-            ops.binary_location = binary
-            serv = Service(os.environ.get('GECKODRIVER_PATH'))
+            serv = Service(ChromeDriverManager().install())
             driver = webdriver.Firefox(service=serv,options=ops)     
             url = f"https://www.ixigo.com/search/result/train/{src}/{dest}/{depdate}//1/0/0/0/ALL"
-            driver.maximize_window()
+          
             driver.get(url)
             # time.sleep(5)
             # cookies = pickle.load(open("cookies.pkl", "rb"))
