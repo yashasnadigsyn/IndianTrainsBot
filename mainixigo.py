@@ -48,7 +48,7 @@ def find(update, context):
 #         ops.add_argument("-disable-gpu")
 #         ops.add_argument("-no-sandbox")
 #         serv = Service(ChromeDriverManager().install())
-        driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
+        driver = webdriver.Firefox(executable_path=GeckoDriverManager().install(), firefox_binary='/app/vendor/firefox/firefox')
         url = f"https://www.ixigo.com/search/result/train/{src}/{dest}/{depdate}//1/0/0/0/ALL"
 
         driver.get(url)
