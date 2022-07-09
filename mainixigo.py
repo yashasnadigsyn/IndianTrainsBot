@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time, os
-from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.firefox import GeckoDriverManager
 from telegram import KeyboardButton
 import telegram.ext, telegram
 from telegram import Bot
@@ -48,7 +48,7 @@ def find(update, context):
 #         ops.add_argument("-disable-gpu")
 #         ops.add_argument("-no-sandbox")
 #         serv = Service(ChromeDriverManager().install())
-        driver = webdriver.Chrome(ChromeDriverManager().install())
+        driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
         url = f"https://www.ixigo.com/search/result/train/{src}/{dest}/{depdate}//1/0/0/0/ALL"
 
         driver.get(url)
