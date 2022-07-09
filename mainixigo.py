@@ -4,8 +4,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time, os
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from telegram import KeyboardButton
 import telegram.ext, telegram
@@ -45,12 +43,12 @@ def find(update, context):
         depdate = findargs[2]
         open('depdate.txt', 'w').write(depdate) 
         update.message.reply_text("Please wait...")
-        ops = Options()
-        ops.binary_location = '/app/.apt/usr/bin/google-chrome'
-        ops.add_argument("-disable-gpu")
-        ops.add_argument("-no-sandbox")
-        serv = Service(ChromeDriverManager().install())
-        driver = webdriver.Chrome(service=serv,options=ops)     
+#         ops = Options()
+#         ops.binary_location = '/app/.apt/usr/bin/google-chrome'
+#         ops.add_argument("-disable-gpu")
+#         ops.add_argument("-no-sandbox")
+#         serv = Service(ChromeDriverManager().install())
+        driver = webdriver.Chrome(ChromeDriverManager().install())
         url = f"https://www.ixigo.com/search/result/train/{src}/{dest}/{depdate}//1/0/0/0/ALL"
 
         driver.get(url)
