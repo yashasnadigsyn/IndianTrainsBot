@@ -46,7 +46,7 @@ def find(update, context):
         open('depdate.txt', 'w').write(depdate) 
         update.message.reply_text("Please wait...")
         ops = Options()
-        ops.binary_location = GOOGLE_CHROME_BIN
+        ops.binary_location = '/app/.apt/usr/bin/google-chrome'
         ops.add_argument("-disable-gpu")
         ops.add_argument("-no-sandbox")
         serv = Service(ChromeDriverManager().install())
