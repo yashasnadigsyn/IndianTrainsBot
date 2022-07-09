@@ -49,7 +49,7 @@ def find(update, context):
         ops.add_argument("-disable-gpu")
         ops.add_argument("-no-sandbox")
         serv = Service(ChromeDriverManager().install())
-        driver = webdriver.Firefox(service=serv,options=ops)     
+        driver = webdriver.Chrome(service=serv,options=ops)     
         url = f"https://www.ixigo.com/search/result/train/{src}/{dest}/{depdate}//1/0/0/0/ALL"
 
         driver.get(url)
