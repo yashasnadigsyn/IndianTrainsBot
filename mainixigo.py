@@ -13,7 +13,7 @@ from telegram import Bot
 import requests, pickle
 from bs4 import BeautifulSoup
 
-TOKEN = 'MYTOKEN'
+TOKEN = '5551289948:AAHagPvwO0QeZ3micPLjgq4pxn_0-SK6llE'
 
 def start(update, context):
     update.message.reply_text("Hi! I am a bot that will help you to find the cheapest train tickets.\n"
